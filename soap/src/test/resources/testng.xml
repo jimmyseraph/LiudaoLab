@@ -2,6 +2,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="soap test suite" verbose="1">
 	<test name="soap test">
-		
+		<packages>
+			<package name="com.liudao.soap.test" />
+		</packages>
 	</test>
 </suite>

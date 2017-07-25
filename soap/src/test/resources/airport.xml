@@ -4,7 +4,7 @@
 	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 	<soap:Body>
 		<GetAirportInformationByCountry xmlns="http://www.webserviceX.NET">
-			<country>china</country>
+			<country>?</country>
 		</GetAirportInformationByCountry>
 	</soap:Body>
 </soap:Envelope>
