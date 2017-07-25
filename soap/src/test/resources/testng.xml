@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="soap test suite" verbose="1">
+	<test name="soap test">
+		
+	</test>
+</suite>
