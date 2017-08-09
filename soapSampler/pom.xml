@@ -14,8 +14,17 @@
 					<verbose>true</verbose>
 					<fork>true</fork>
 					<compilerVersion>1.8</compilerVersion>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>ApacheJMeter_components</artifactId>
+			<version>3.2</version>
+		</dependency>
+	</dependencies>
 </project>
