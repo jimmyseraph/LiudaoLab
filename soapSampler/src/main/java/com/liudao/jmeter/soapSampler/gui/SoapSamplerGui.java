@@ -34,7 +34,7 @@ public class SoapSamplerGui extends AbstractSamplerGui implements ActionListener
 	private JLabeledTextField urlTextField = new JLabeledTextField("service url"); 
 	private JButton button = new JButton("parse request");
 	private JLabeledTextField soapActionTextField = new JLabeledTextField("SoapAction");
-	private JPanel demoPropertyPanel = new JPanel(new BorderLayout());;
+	private JPanel soapPropertyPanel = new JPanel(new BorderLayout());;
 	private List<JLabeledTextField> propertyTextFields = new ArrayList<>();
 	private SOAPMessage soapMessage;
 	private List<SOAPElement> elements = new ArrayList<>();
@@ -45,23 +45,23 @@ public class SoapSamplerGui extends AbstractSamplerGui implements ActionListener
 	}
 	
 	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
-		add(makeTitlePanel(),BorderLayout.NORTH);
-		JPanel demoConfigurePanel = new JPanel(new BorderLayout());
-		demoConfigurePanel.setBorder(BorderFactory.createTitledBorder(
-				BorderFactory.createEtchedBorder(), "SOAP Configure"));
-		VerticalPanel configureVerticalPanel = new VerticalPanel(5, VerticalPanel.LEFT_ALIGNMENT); 
-		JPanel configurePanel = new HorizontalPanel();
-		button.setActionCommand("parse_xml");
-		button.addActionListener(this);
-		configurePanel.add(soapActionTextField);
-		configurePanel.add(button);
-		configureVerticalPanel.add(urlTextField);
-		configureVerticalPanel.add(fileTextField);
-		configureVerticalPanel.add(configurePanel);
-		demoConfigurePanel.add(configureVerticalPanel);
-		add(demoConfigurePanel,BorderLayout.CENTER);
+		setLayout(new BorderLayout()); // 设置布局为JMeter内置的BorderLayout
+		setBorder(makeBorder()); // 设置边框为默认边框
+		add(makeTitlePanel(),BorderLayout.NORTH); // 添加JMeter内置的第一栏名称、注解部分
+		JPanel soapConfigurePanel = new JPanel(new BorderLayout()); // 创建一个Panel
+		soapConfigurePanel.setBorder(BorderFactory.createTitledBorder(
+				BorderFactory.createEtchedBorder(), "SOAP Configure")); // 设置Panel的边框为带有蚀刻风格的边框线，并且带有名称
+		VerticalPanel configureVerticalPanel = new VerticalPanel(5, VerticalPanel.LEFT_ALIGNMENT); // 创建垂直对齐且左对齐的panel
+		JPanel configurePanel = new HorizontalPanel(); // 创建水平对齐的Panel
+		button.setActionCommand("parse_xml"); // 设置“parse request”按钮的触发命令为“parse_xml”
+		button.addActionListener(this); // 添加按钮的触发监听器
+		configurePanel.add(soapActionTextField); // 将SoapAction输入框添加到configurePanel中
+		configurePanel.add(button); // 将“parse request”按钮添加到configurePanel的SoapAction输入框之后
+		configureVerticalPanel.add(urlTextField); // 将"service url"输入框添加到configureVerticalPanel中
+		configureVerticalPanel.add(fileTextField); // 将"xml file"输入框添加到configureVerticalPanel中
+		configureVerticalPanel.add(configurePanel); // 将configurePanel添加到configureVerticalPanel中
+		soapConfigurePanel.add(configureVerticalPanel); // 将configureVerticalPanel添加到soapConfigurePanel中
+		add(soapConfigurePanel,BorderLayout.CENTER); // 将soapConfigurePanel添加到界面上
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class SoapSamplerGui extends AbstractSamplerGui implements ActionListener
 
 	@Override
 	public void modifyTestElement(TestElement te) {
-		super.configureTestElement(te);
+		super.configureTestElement(te); // 不可缺少，否则TestElement类无法获得名字
 		SoapSampler sampler = (SoapSampler)te;
 		sampler.setUrl(urlTextField.getText());
 		sampler.setFilename(fileTextField.getText());
@@ -99,7 +99,7 @@ public class SoapSamplerGui extends AbstractSamplerGui implements ActionListener
 	
 	@Override
 	public void configure(TestElement te) {
-		super.configure(te);
+		super.configure(te); // 不可缺少，否则将会出现名字丢失
 		SoapSampler sampler = (SoapSampler)te;
 		urlTextField.setText(sampler.getUrl());
 		fileTextField.setText(sampler.getFilename());
@@ -124,34 +124,34 @@ public class SoapSamplerGui extends AbstractSamplerGui implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		if(action.equals("parse_xml")){
-			String file = fileTextField.getText();
-			String soapAction = soapActionTextField.getText();
+		if(action.equals("parse_xml")){ // 判断是否发生的行为名称是parse_xml
+			String file = fileTextField.getText(); // 读取xml文件输入框中输入的路径和文件名
+			String soapAction = soapActionTextField.getText(); // 读取soapaction输入框中输入的action
 			if(!file.trim().equals("")){
-				soapMessage = SoapUtils.getSOAPMessage(file.trim(), soapAction);
+				soapMessage = SoapUtils.getSOAPMessage(file.trim(), soapAction); //从文件中读出soapMessage
 				try {
-					elements = SoapUtils.getParamElements(soapMessage.getSOAPBody());
-					addPropertyPanel(elements,null);
+					elements = SoapUtils.getParamElements(soapMessage.getSOAPBody()); // 根据"?"获取所有参数节点
+					addPropertyPanel(elements,null); // 根据参数节点添加属性panel
 				} catch (SOAPException e1) {
 					log.error(e1.getMessage());
 					e1.printStackTrace();
 				}
 				
 			}else{
-				removePropertyPanel();
+				removePropertyPanel(); // 如果输入文件，则移除属性Panel
 			}
 		}
 	}
 
 	private void removePropertyPanel() {
-		demoPropertyPanel.removeAll();
-		remove(demoPropertyPanel);
+		soapPropertyPanel.removeAll();
+		remove(soapPropertyPanel);
 	}
 
 	private void addPropertyPanel(List<SOAPElement> elements,List<String> soapProperties) {
-		demoPropertyPanel.removeAll();
+		soapPropertyPanel.removeAll();
 		if(elements != null){
-			demoPropertyPanel.setBorder(BorderFactory.createTitledBorder(
+			soapPropertyPanel.setBorder(BorderFactory.createTitledBorder(
 					BorderFactory.createEtchedBorder(), "SOAP Property"));
 			VerticalPanel propertyPanel = new VerticalPanel(
 					8, VerticalPanel.LEFT_ALIGNMENT);
@@ -165,9 +165,9 @@ public class SoapSamplerGui extends AbstractSamplerGui implements ActionListener
 				propertyTextFields.add(propertyTextField);
 				propertyPanel.add(propertyTextField);
 			}
-			demoPropertyPanel.add(propertyPanel, BorderLayout.NORTH);
-			add(demoPropertyPanel,BorderLayout.SOUTH);
+			soapPropertyPanel.add(propertyPanel, BorderLayout.NORTH);
+			add(soapPropertyPanel,BorderLayout.SOUTH);
 		}
-		revalidate();
+		revalidate(); // 由于动态显示，所以需要重画界面
 	}
 }
